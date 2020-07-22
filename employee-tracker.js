@@ -10,3 +10,9 @@ var connection = mysql.createConnection({
   password: "password",
   database: "employeesDB"
 });
+
+connection.connect(function (err) {
+    if (err) throw err;
+  
+    firstPrompt();
+  });
