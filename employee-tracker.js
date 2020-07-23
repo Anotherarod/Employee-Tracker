@@ -112,6 +112,31 @@ connection.connect(function (err) {
       //     managerId
       //   );
       // }
+      async function addDept(){
+        inquirer
+        .prompt([
+          {
+            type: "input",
+            name: "deptName", 
+            message: "What Department would you like to add?"
+          }
+        ])
+        .then(function(res){
+          console.log(res);
+          const query = connection.query(
+            "INSERT INTO department SET ?", 
+            {
+              name: res.deptName
+            }, 
+            function(err, res){
+              connection.query("SELECT * FROM department", function(err, res){
+                console.table(res); 
+                promptStart(); 
+              })
+            }
+          )
+        })
+      }
   
 
     
