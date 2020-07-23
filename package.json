@@ -1,0 +1,26 @@
+{
+  "name": "employee-tracker-HW-repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "employee-tracker.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.3.2",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anotherarod/employee-tracker-HW-repo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anotherarod/employee-tracker-HW-repo/issues"
+  },
+  "homepage": "https://github.com/Anotherarod/employee-tracker-HW-repo#readme"
+}
