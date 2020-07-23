@@ -68,6 +68,7 @@ function promptStart() {
 
 async function viewAllDepts() {
   connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
     console.table(res);
     promptStart();
   })
@@ -121,12 +122,13 @@ async function addDept() {
       message: "Enter department name:"
     }])
     .then(function (res) {
-      console.log(res);
+      console.table(res);
       const query = connection.query(
         "INSERT INTO department SET ?", {
           name: res.deptName
         },
-        function (err, res) {
+        async function (err,res) {
+          if (err) throw err;
           connection.query("SELECT * FROM department", function (err, res) {
             console.table(res);
             promptStart();
@@ -153,13 +155,44 @@ async function addRole() {
     
     type: "number",
     name: "department_id",
-    message: "Enter Department:"
+    message: "Enter Department ID:"
   
-  }]).then(function (response) {
-    connection.query("INSERT INTO role (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, data) {
-      console.table(data);
+  }]).then(function (res) {
+    connection.query("INSERT INTO role (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      promptStart();
     })
-    promptStart();
-  })
+    })
+    
 
+}
+function addEmployee() {
+  inquirer.prompt([{
+          type: "input",
+          name: "firstName",
+          message: "Employee First Name?"
+      },
+      {
+          type: "input",
+          name: "lastName",
+          message: "Employee Last Name?"
+      },
+      {
+          type: "number",
+          name: "roleId",
+          message: "Employee role ID"
+      },
+      {
+          type: "number",
+          name: "managerId",
+          message: "Employees manager ID?"
+      }
+  ]).then(function(res) {
+      connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)', [res.firstName, res.lastName, res.roleId, res.managerId], function(err, data) {
+          if (err) throw err;
+          console.table("Employee submitted");
+          promptStart();
+      })
+  })
 }
