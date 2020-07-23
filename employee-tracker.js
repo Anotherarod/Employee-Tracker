@@ -208,8 +208,8 @@ async function updateEmployeeRole() {
           type: "number",
           name: "role_id"
       }
-  ]).then(function (response) {
-      connection.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [response.role_id, response.name], function (err, res) {
+  ]).then(function (res) {
+      connection.query("UPDATE employee SET role_id = ? WHERE first_name = ?", [res.role_id, res.name], function (err, res) {
         if (err) throw err;  
         console.table("Role Updated");
       })
