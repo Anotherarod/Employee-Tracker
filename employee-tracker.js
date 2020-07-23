@@ -12,37 +12,37 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function (err) {
-    if (err) throw err;
-  
-    promptStart();
-  });
+  if (err) throw err;
 
-  function promptStart() {
-    inquirer
-      .prompt({
-        name: "action",
-        type: "rawlist",
-        message: "What would you like to do?",
-        choices: [
-          "View All Departments",
-          "View All Roles",
-          "View All Employees",
-          "Add Department",
-          "Add Role",
-          "Add Employee",
-          "Update Employee Role",
-        ]
-      })
-      .then(function(answer) {
-        switch (answer.action) {
+  promptStart();
+});
+
+function promptStart() {
+  inquirer
+    .prompt({
+      name: "action",
+      type: "rawlist",
+      message: "What would you like to do?",
+      choices: [
+        "View All Departments",
+        "View All Roles",
+        "View All Employees",
+        "Add Department",
+        "Add Role",
+        "Add Employee",
+        "Update Employee Role",
+      ]
+    })
+    .then(function (answer) {
+      switch (answer.action) {
         case "View All Departments":
           viewAllDepts();
           break;
-  
+
         case "View All Roles":
           viewAllRoles();
           break;
-  
+
         case "View All Employees":
           viewAllEmployees();
           break;
@@ -60,83 +60,106 @@ connection.connect(function (err) {
           break;
 
         case "Update Employee Role":
-            updateEmployeeRole();
-                  break;
-        }
-      });
-  }
+          updateEmployeeRole();
+          break;
+      }
+    });
+}
 
-   async function viewAllDepts(){
-    connection.query ("SELECT * FROM department", function(err, res){
-      console.table(res);
-      promptStart();
-    })
-    }
-  // async function viewAllDepts() {
-  //   var query = "SELECT * FROM department";
-  //     connection.query(query, function(err, res) {
-  //         console.log(`DEPARTMENTS:`)
-  //       res.forEach(department => {
-  //           console.log(`ID: ${department.id} | Name: ${department.name}`)
-  //       })
-  //       start();
-  //       });
-  //   };
-   async function viewAllRoles(){
-     connection.query("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id", async function (err,res){
+async function viewAllDepts() {
+  connection.query("SELECT * FROM department", function (err, res) {
+    console.table(res);
+    promptStart();
+  })
+}
+// async function viewAllDepts() {
+//   var query = "SELECT * FROM department";
+//     connection.query(query, function(err, res) {
+//         console.log(`DEPARTMENTS:`)
+//       res.forEach(department => {
+//           console.log(`ID: ${department.id} | Name: ${department.name}`)
+//       })
+//       start();
+//       });
+//   };
+async function viewAllRoles() {
+  connection.query("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id", async function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    promptStart();
+  })
+}
+// async function viewAllRoles() {
+// var query = "SELECT * FROM role";
+//     connection.query(query, function(err, res) {
+//         console.log(`ROLES:`)
+//     res.forEach(role => {
+//         console.log(`ID: ${role.id} | Title: ${role.title} | Salary: ${role.salary} | Department ID: ${role.department_id}`);
+//     })
+//     start();
+//     });
+async function viewAllEmployees() {
+  connection.query("SELECT employee.first_name, employee.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id",
+    async function (err, res) {
       if (err) throw err;
+
       console.table(res);
       promptStart();
-    })}
-    // async function viewAllRoles() {
-    // var query = "SELECT * FROM role";
-    //     connection.query(query, function(err, res) {
-    //         console.log(`ROLES:`)
-    //     res.forEach(role => {
-    //         console.log(`ID: ${role.id} | Title: ${role.title} | Salary: ${role.salary} | Department ID: ${role.department_id}`);
-    //     })
-    //     start();
-    //     });
-    async function viewAllEmployees() {
-      connection.query("SELECT employee.first_name, employee.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id",  
-      async function(err, res) {
-          if (err) throw err;
-        
-          console.table(res);
-          promptStart();
-        });
-      }
-      // async function viewAllEmployeesByManager(managerId) {
-      //   return this.connection.query(
-      //     "SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = ?;",
-      //     managerId
-      //   );
-      // }
-      async function addDept(){
-        inquirer
-        .prompt([
-          {
-            type: "input",
-            name: "deptName", 
-            message: "What Department would you like to add?"
-          }
-        ])
-        .then(function(res){
-          console.log(res);
-          const query = connection.query(
-            "INSERT INTO department SET ?", 
-            {
-              name: res.deptName
-            }, 
-            function(err, res){
-              connection.query("SELECT * FROM department", function(err, res){
-                console.table(res); 
-                promptStart(); 
-              })
-            }
-          )
-        })
-      }
-  
+    });
+}
+// async function viewAllEmployeesByManager(managerId) {
+//   return this.connection.query(
+//     "SELECT employee.id, employee.first_name, employee.last_name, department.name AS department, role.title FROM employee LEFT JOIN role on role.id = employee.role_id LEFT JOIN department ON department.id = role.department_id WHERE manager_id = ?;",
+//     managerId
+//   );
+// }
+async function addDept() {
+  inquirer
+    .prompt([{
+      type: "input",
+      name: "deptName",
+      message: "Enter department name:"
+    }])
+    .then(function (res) {
+      console.log(res);
+      const query = connection.query(
+        "INSERT INTO department SET ?", {
+          name: res.deptName
+        },
+        function (err, res) {
+          connection.query("SELECT * FROM department", function (err, res) {
+            console.table(res);
+            promptStart();
+          })
+        }
+      )
+    })
+}
+
+async function addRole() {
+  inquirer.prompt([{
+
+    type: "input",
+    name: "title",
+    message: "Enter Title:"
+
+  }, {
+
+    type: "number",
+    name: "salary",
+    message: "Enter Salary:"
+  }, {
 
     
+    type: "number",
+    name: "department_id",
+    message: "Enter Department:"
+  
+  }]).then(function (response) {
+    connection.query("INSERT INTO role (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, data) {
+      console.table(data);
+    })
+    promptStart();
+  })
+
+}
