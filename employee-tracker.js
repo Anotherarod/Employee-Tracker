@@ -84,13 +84,13 @@ async function viewAllDepts() {
 //       });
 //   };
 async function viewAllRoles() {
-  connection.query("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id", async function (err, res) {
+  connection.query("SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;", async function (err, res) {
     if (err) throw err;
     console.table(res);
     promptStart();
   })
 }
-// async function viewAllRoles() {
+// async function viewAllRoles() {("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id"
 // var query = "SELECT * FROM role";
 //     connection.query(query, function(err, res) {
 //         console.log(`ROLES:`)
@@ -100,8 +100,13 @@ async function viewAllRoles() {
 //     start();
 //     });
 async function viewAllEmployees() {
-  connection.query("SELECT employee.first_name, employee.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id",
-    async function (err, res) {
+  connection.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager on manager.id = employee.manager_id;"
+    ,async function (err, res) {   
+    
+      
+      // "SELECT employee.id, employee.first_name, employee.last_name, role.title AS \"role\", manager.first_name AS \"manager\" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id"
+      // `SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS manager FROM employee e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id  ON d.id = r.department_id LEFT JOIN employee m ON m.id = e.manager_id//////employeeall
+  
       if (err) throw err;
 
       console.table(res);
@@ -153,12 +158,12 @@ async function addRole() {
   }, {
 
 
-    type: "number",
+    type: "input",
     name: "department_id",
     message: "Enter Department ID:"
 
   }]).then(function (res) {
-    connection.query("INSERT INTO role (title, salary, department_id) values (?, ?, ?)", [response.title, response.salary, response.department_id], function (err, res) {
+    connection.query("INSERT INTO role (title, salary, department_id) values (?, ?, ?)", [res.title, res.salary, res.department_id], function (err, res) {
       if (err) throw err;
       console.table("Role Added");
       promptStart();
@@ -200,7 +205,7 @@ function addEmployee() {
 async function updateEmployeeRole() {
   inquirer.prompt([
       {
-          message: "wWhich employee's role would you like to update?",
+          message: "Which employee's role would you like to update?",
           type: "input",
           name: "name"
       }, {
