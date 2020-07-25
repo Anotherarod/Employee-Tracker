@@ -29,9 +29,13 @@ Then "npm init -y" this installs your package.json file.
 
 Next, "npm install mysql", "npm install express","npm install inquirer", and "npm install console.table".
 
-Console.table, which is an npm package and formats the populated data for the purposes needed.
+MySQL is a relational database management system. SQL stands for:  Structured Query Language.
 
 Use inquirer npm package to interact with the user via the command-line.
+
+Express is a collection of common interactive command line user interfaces that is also a built in node package.
+
+Console.table, which is an npm package and formats the populated data for the purposes needed.
 
 To run the program: node employee-tracker.js and follow the prompts to run through the program.
 
