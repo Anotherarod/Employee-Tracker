@@ -33,7 +33,7 @@ Console.table, which is an npm package and formats the populated data for the pu
 
 Use inquirer npm package to interact with the user via the command-line.
 
-To run the: node employee-tracker.js and follow the prompts to run through the program.
+To run the program: node employee-tracker.js and follow the prompts to run through the program.
 
 Technologies use:
 
