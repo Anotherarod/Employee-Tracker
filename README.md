@@ -1,5 +1,5 @@
 # employee-tracker-HW-repo
-Employee tracker is a command-line application for managing a company's employees using node, inquirer, and MySQL. This is an interface that makesit easy for non-developers to view and interact with information stored in databases.
+Employee tracker is a command-line application for managing a company's employees using node, inquirer, and MySQL. This is an interface that makes it easy for non-developers to view and interact with information stored in databases.
 
 To complete this assignment I had to design the following database schema containing three tables, below is a wire frame example: 
 
@@ -23,7 +23,7 @@ https://drive.google.com/file/d/1cL1rHJbthe9s-MvCqLm_tiUoUcPh1VpE/view
 
 Here are some guidelines to use this interface:
 
-Use the MySQL NPM package to connect to your MySQL database and perform queries. So you must "npm install", this will install all necessary dependencie. 
+Use the MySQL NPM package to connect to your MySQL database and perform queries. So you must "npm install", this will install all necessary dependencies. 
 
 Then "npm init -y" this installs your package.json file.
 
